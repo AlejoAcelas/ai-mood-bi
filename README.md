@@ -1,6 +1,6 @@
 # Long-Term Trends in the Public Perception of Artificial Intelligence
 
-This project extends the fascinating 2017 analysis by Ethan Fast and Microsoft researcher Eric Horvitz on how the public perception of artificial intelligence has evolved over 30 years, as seen through the lens of articles published in the New York Times.
+This project extends the [compelling 2017 analysis by Ethan Fast and Microsoft researcher Eric Horvitz](https://arxiv.org/abs/1609.04904) on how the public perception of artificial intelligence has evolved over 30 years, as seen through the lens of articles published in the New York Times.
 
 Some key extensions and improvements in this updated analysis:
 
