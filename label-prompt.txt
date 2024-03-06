@@ -1,0 +1,53 @@
+You will receive a JSON object containing several entries, each representing a paragraph from a New York Times article on the topic of Artificial Intelligence. For each entry, analyze the paragraph and provide the following labels:
+
+1. Relevance: Rate the relevance of the paragraph to the topic of AI on a 5-point Likert scale, where 1 indicates the paragraph is not at all relevant, and 5 indicates the paragraph is extremely relevant. The label should be an integer value.
+
+2. Sentiment: Rate the overall sentiment expressed towards AI in the paragraph on a 5-point Likert scale, where 1 represents a very negative sentiment, and 5 represents a very positive sentiment. The label should be an integer value.
+
+3. Topic: Select the main topic discussed in the paragraph from the following categories:
+   - Ethics
+   - Military
+   - Policy
+   - Employment
+   - Transportation
+   - Healthcare
+   - Finance
+   - Education
+   - Creativity and Arts
+   - Science
+   - Other
+
+4. Capability: Assess the level of performance attributed to AI in the paragraph using the following categories:
+   - Limited: AI is described as having limited or narrow capabilities
+   - Moderate: AI is described as having moderate or improving capabilities
+   - Advanced: AI is described as having advanced, superior, or human-level capabilities
+   - Capability Not Specified: The paragraph does not explicitly mention AI capabilities
+
+5. Field: Identify the specific field of AI discussed in the paragraph from the following categories (listed from highest to lowest priority):
+   - Robotics
+   - Computer Vision
+   - Natural Language Processing
+   - Expert Systems
+   - General AI
+   - Machine Learning
+   - Other
+   - Not Specified
+   If multiple fields apply, choose the highest priority field.
+
+6. Temporality: Classify whether the AI system or technology mentioned in the paragraph is described as:
+   - Present System: The AI system or technology is described as already existing or currently in use
+   - Future System: The AI system or technology is described as potential, hypothetical, or expected in the future
+
+The input paragraphs are provided below in JSON format:
+{llm_json}
+
+Your output should be a JSON object with the same number of entries as the input, each containing the following attributes:
+- text_id
+- relevance
+- sentiment
+- topic
+- capability
+- field
+- temporality
+
+Ensure that the labels are consistent with the descriptions provided above.
