@@ -2,7 +2,7 @@ from langchain_core.output_parsers import JsonOutputParser
 from langchain_openai import OpenAI
 from langchain.prompts import PromptTemplate
 import ratelimit
-from constants import ONE_MINUTE, OPENAI_API_KEY
+from constants import ONE_MINUTE, OPENAI_API_KEY, OPENAI_API_RATE_LIMIT
 
 def initialize_labeling_llm_chain(
     prompt_template_path: str = 'label-prompt.txt',
@@ -31,7 +31,7 @@ def initialize_labeling_llm_chain(
 LLM_CHAIN = initialize_labeling_llm_chain()
 
 @ratelimit.sleep_and_retry
-@ratelimit.limits(calls=12, period=ONE_MINUTE)
+@ratelimit.limits(calls=OPENAI_API_RATE_LIMIT, period=ONE_MINUTE)
 async def get_content_labels(llm_json):
-    label_json = LLM_CHAIN.invoke({'llm_json': llm_json})
+    label_json = await LLM_CHAIN.ainvoke({'llm_json': llm_json})
     return label_json

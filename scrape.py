@@ -2,10 +2,19 @@ import requests
 import ratelimit
 import re
 import parse
-from constants import NYT_ENDPOINT, WAYBACK_ENDPOINT, NYT_METADATA_COLUMNS, JSON_ITEM, JSON_LIST, ONE_MINUTE
+from constants import (
+    NYT_ENDPOINT,
+    WAYBACK_ENDPOINT,
+    NYT_METADATA_COLUMNS,
+    JSON_ITEM,
+    JSON_LIST,
+    ONE_MINUTE,
+    NYT_API_RATE_LIMIT,
+    WAYBACK_API_RATE_LIMIT,
+    )
 
 @ratelimit.sleep_and_retry
-@ratelimit.limits(calls=4, period=ONE_MINUTE)
+@ratelimit.limits(calls=NYT_API_RATE_LIMIT, period=ONE_MINUTE)
 async def get_nyt_article_metadata(params: JSON_ITEM) -> JSON_LIST:
     response = requests.get(NYT_ENDPOINT, params=params).json()
     metadata = []
@@ -20,7 +29,7 @@ async def get_nyt_article_metadata(params: JSON_ITEM) -> JSON_LIST:
         return []
 
 @ratelimit.sleep_and_retry
-@ratelimit.limits(calls=14, period=ONE_MINUTE)
+@ratelimit.limits(calls=WAYBACK_API_RATE_LIMIT, period=ONE_MINUTE)
 async def get_AI_article_content(nyt_metadatum: JSON_ITEM) -> JSON_LIST:
     url = nyt_metadatum['web_url']
     response = requests.get(WAYBACK_ENDPOINT, params={'url':url}).json()

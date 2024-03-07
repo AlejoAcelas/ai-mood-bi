@@ -42,6 +42,7 @@ The input paragraphs are provided below in JSON format:
 {llm_json}
 
 Your output should be a JSON object with the same number of entries as the input, each containing the following attributes:
+- article_id
 - text_id
 - relevance
 - sentiment
