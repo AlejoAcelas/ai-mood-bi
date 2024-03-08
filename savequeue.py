@@ -1,5 +1,6 @@
+import os
 import asyncio
-from constants import JSON_LIST, END_OF_QUEUE, SNAPSHOT_INTERVAL
+from constants import JSON_LIST, END_OF_QUEUE, SNAPSHOT_INTERVAL, SNAPSHOT_DIR, LOG_DIR
 import json
 import datetime
 
@@ -31,11 +32,11 @@ class SaveQueue():
             await asyncio.sleep(interval)
 
     def save_registry(self, filename: str):
-        with open(f"test/snapshot/{filename}.json", 'w') as file:
+        with open(f"{SNAPSHOT_DIR}/{filename}.json", 'w') as file:
             json.dump(self.registry, file, indent=2)
         self.log_registry(filename)
         
     def log_registry(self, filename: str):
         current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        with open(f'test/log/{filename}.txt', 'a') as file:
+        with open(f'{LOG_DIR}/{filename}.txt', 'a') as file:
             file.write(f"{current_time}: Saved {len(self.registry)} items from registry\n")

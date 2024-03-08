@@ -19,6 +19,12 @@ SNAPSHOT_INTERVAL = 60 # seconds
 JSON_LIST = List[Dict[str, str]]
 JSON_ITEM = Dict[str, str]
 
+# Directories
+SNAPSHOT_DIR = 'data/snapshot'
+LOG_DIR = 'data/log'
+FINAL_DIR = 'data'
+
+
 ### Other
-NYT_METADATA_COLUMNS = ['_id', 'web_url', 'pub_date', 'document_type', 'type_of_material', 'word_count', 'keywords', 'source']
+NYT_METADATA_COLUMNS = ['_id', 'web_url', 'pub_date', 'document_type', 'word_count', 'keywords', 'source']
 END_OF_QUEUE = 'END_OF_QUEUE'
