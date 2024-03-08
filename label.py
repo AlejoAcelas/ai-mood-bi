@@ -33,5 +33,5 @@ LLM_CHAIN = initialize_labeling_llm_chain()
 @ratelimit.sleep_and_retry
 @ratelimit.limits(calls=OPENAI_API_RATE_LIMIT, period=ONE_MINUTE)
 async def get_content_labels(llm_json):
-    label_json = await LLM_CHAIN.ainvoke({'llm_json': llm_json})
+    label_json = LLM_CHAIN.invoke({'llm_json': llm_json})
     return label_json

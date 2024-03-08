@@ -10,7 +10,7 @@ from typing import Union, Callable
 import traceback
 import asyncio
 import json
-from constants import NYT_API_KEY, END_OF_QUEUE, JSON_LIST, JSON_ITEM, NYT_API_RATE_LIMIT, WAYBACK_API_RATE_LIMIT, OPENAI_API_RATE_LIMIT
+from constants import NYT_API_KEY, END_OF_QUEUE, JSON_LIST, JSON_ITEM, NYT_API_RATE_LIMIT, WAYBACK_API_RATE_LIMIT, OPENAI_API_RATE_LIMIT, FINAL_DIR
 import label
 import scrape
 from savequeue import SaveQueue
@@ -81,17 +81,17 @@ async def forward_queue_items(
     while queue_in_running:
         items = []
         for _ in range(max_concurrent_calls):
-            if not queue_in.empty():
-                item = await queue_in.get()
-                if item is END_OF_QUEUE:
-                    queue_in_running = False
-                    queue_in.task_done()
-                    break
-                else:
-                    items.append(item)
-                    queue_in.task_done()
-            else:
+            # if not queue_in.empty():
+            item = await queue_in.get()
+            if item is END_OF_QUEUE:
+                queue_in_running = False
+                queue_in.task_done()
                 break
+            else:
+                items.append(item)
+                queue_in.task_done()
+            # else:
+            #     break
                         
         if items:
             await asyncio.gather(*[process_item(item) for item in items])
@@ -151,9 +151,9 @@ if __name__ == '__main__':
     search_param_list = [{**fixed_search_params, **params} for params in variable_search_params]
     metadata, content, labels = asyncio.run(main(search_param_list))
     
-    save_json(metadata, 'test/metadata-test.json')
-    save_json(content, 'test/content-test.json')
-    save_json(labels, 'test/labels-test.json')
+    save_json(metadata, f'{FINAL_DIR}/metadata-test.json')
+    save_json(content, f'{FINAL_DIR}/content-test.json')
+    save_json(labels, f'{FINAL_DIR}/labels-test.json')
 
 
 # %%
