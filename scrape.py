@@ -22,7 +22,12 @@ async def get_nyt_article_metadata(params: JSON_ITEM) -> JSON_LIST:
         # print(response)
         for row in response['response']['docs']:
             row_metadata = {col: row[col] for col in NYT_METADATA_COLUMNS}
+            
             row_metadata['keywords'] = [kw_info['value'] for kw_info in row['keywords']]
+            row_metadata['date_batch_start'] = params['begin_date']
+            row_metadata['date_batch_end'] = params['end_date']
+            row_metadata['page'] = params['page']
+            
             metadata.append(row_metadata)
         return metadata
     else:
