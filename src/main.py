@@ -1,11 +1,11 @@
 # Originally inspired by https://github.com/suewoon/nyt-api-wrapper/blob/2508718e8fcf6bc8dcd63f5e8874b80684177259/scraper.py
 
 # %%
+import pandas as pd
 import argparse
 import requests
 import datetime
 import dateutil
-import pandas as pd 
 from typing import Union, Callable
 import traceback
 import asyncio
@@ -126,14 +126,37 @@ def save_json(json_object, filename):
     with open(filename, 'w') as file:
         json.dump(json_object, file, indent=2)
         
+def merge_json_data(
+    metadata: JSON_LIST,
+    content: JSON_LIST,
+    labels: JSON_LIST,
+) -> pd.DataFrame:
+    metadata = pd.DataFrame(metadata)
+    content = pd.DataFrame(content)
+    labels = pd.DataFrame(labels)
+    
+    metadata_and_content = metadata.merge(
+        content,
+        left_on='_id',
+        right_on='article_id',
+        how='outer',
+    )
+    metadata_and_content.astype({'text_id': 'Int64'})
+    full_data = metadata_and_content.merge(
+        labels,
+        left_on=['article_id', 'text_id'],
+        right_on=['article_id', 'text_id'],
+        how='outer',
+    )
+    full_data = full_data.dropna(subset=['text', 'sentiment'])
+    return full_data
+        
 # %%        
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(prog='', description='cli argument for scarping articles')
     arg_parser.add_argument('--start_date', dest='start_date', help='Date query articles start from (%Y%m)', required=True)
     arg_parser.add_argument('--end_date', dest='end_date', help='Date query articles end (%Y%m)', required=True)
-    # arg_parser.add_argument('--start_date', dest='start_date', help='Date query articles start from (%Y%m)', default='202101')
-    # arg_parser.add_argument('--end_date', dest='end_date', help='Date query articles end (%Y%m)', default='202102')
     arg_parser.add_argument('--articles_per_month', dest='articles_per_month', default=10, help='Number of NYT articles to scrape from every month')
     args = arg_parser.parse_args()
 
@@ -154,6 +177,9 @@ if __name__ == '__main__':
     save_json(metadata, f'{FINAL_DIR}/metadata-test.json')
     save_json(content, f'{FINAL_DIR}/content-test.json')
     save_json(labels, f'{FINAL_DIR}/labels-test.json')
+    
+    merged_data = merge_json_data(metadata, content, labels)
+    merged_data.to_json(f'{FINAL_DIR}/ai-mood-test.json', orient='records', indent=2)
 
 
 # %%
